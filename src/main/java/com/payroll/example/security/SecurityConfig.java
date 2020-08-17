@@ -19,6 +19,7 @@ import com.payroll.example.service.MyUserDetailService;
 
 @Configuration
 @EnableWebSecurity
+
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -39,8 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorities(new SimpleGrantedAuthority("ROLE_USER"));
 	}
 
-	@Bean
+	
 	@Override
+	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
@@ -55,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 		provider.setPasswordEncoder(encoder());
 		provider.setUserDetailsService(service);
+
 		return provider;
 	}
 
@@ -65,7 +68,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		        //.addFilterAt(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class).authorizeRequests()
 				.antMatchers("/login").permitAll().antMatchers("/orders/**").hasRole("USER")
-				.antMatchers("/employees/**").hasRole("ADMIN");
+				.antMatchers("/employees/**").hasRole("ADMIN")
+				;
 	
 		// .anyRequest().authenticated();
 

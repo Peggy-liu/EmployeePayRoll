@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	public Authentication attemptAuthentication( HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
-		//SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
+		
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 		AuthRequest credential = null;
 		
@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("username is "+obtainUsername(request)+" and password is "+ obtainPassword(request));
+		System.out.println(credential.getUsername());
 		Authentication result = manager.authenticate(new UsernamePasswordAuthenticationToken(credential.getUsername(), credential.getPassword()));
 		return result;
 	}
@@ -61,9 +61,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
-		System.out.println("here");
+		
 		 SecurityContextHolder.getContext().setAuthentication(authResult);
 		UserDetails user = (UserDetails) authResult.getPrincipal();
+		
 		
 		//create Jwt token
 		String token = JWT.create()
@@ -90,11 +91,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 "Authentication Failed");
     }
 
-//	@Override
-//	@Autowired
-//	public void setAuthenticationManager(AuthenticationManager authenticationManager) {
-//	super.setAuthenticationManager(authenticationManager);
-//	}
+
 
 
 	
